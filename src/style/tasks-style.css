@@ -1,0 +1,220 @@
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+  }
+  
+  a{
+    text-decoration: none;
+    color: #000;
+  }
+  /* Controles de filtro */
+  .filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: #393e46;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .filters button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: blueviolet;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  
+  .filters button:hover {
+    background-color: #88dd22;
+    color: #0e1013;
+  }
+  
+  /* Estilo para tarefas concluídas */
+  .task-item.concluida {
+    opacity: 0.7;
+    background-color: #393e46;
+    border-left: 4px solid #88dd22;
+  }
+  
+  .task-item.concluida h3 {
+    color: #88dd22;
+    text-decoration: line-through;
+  }
+  
+  body {
+    color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(10deg, rgba(106,106,106,1) 0%, rgba(146,146,158,1) 27%, rgba(89,90,91,1) 74%);
+  }
+  
+  /* Header com saudação e data/hora alinhados */
+  .header {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222831;
+    color: #69bf00;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .main-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    width: 80%;
+    max-width: 1200px;
+    margin-top: 20px;
+  }
+  
+
+  
+  .filters {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .task-list {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  /* Formulário de tarefas */
+  .task-form {
+    width: 100%;
+    background: #393e46;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .task-form h2 {
+    color: #88dd22;
+    margin-bottom: 10px;
+    font-family: "Bruno Ace SC", sans-serif;
+  }
+  
+  .task-form label {
+    display: block;
+    text-align: left;
+    color: #b0b2b3;
+    font-weight: bold;
+    margin-top: 10px;
+    
+  }
+  
+  .task-form input, .task-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #b0b2b3;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+    color: #0e1013;
+  }
+  
+  .task-form button {
+    margin-top: 15px;
+    padding: 10px;
+    width: 50%;
+    background-color: blueviolet;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .task-form button:hover {
+    background-color: #88dd22;
+    color: #0e1013;
+  }
+  
+  /* Lista de tarefas */
+
+  
+  .task-list h2 {
+    color: #88dd22;
+    text-align: center;
+    font-family: "Bruno Ace SC", sans-serif;
+  }
+  
+  .task-item {
+    background-color: #393e46;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    color: #b0b2b3;
+  }
+  
+  .task-item.concluida {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+  .task-item h3 {
+    color: #88dd22;
+  }
+  
+  .task-item p {
+    color: #b0b2b3;
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+  
+  .task-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .task-actions button {
+    width: 30%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #0e1013;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  /* Cores dos botões de tarefas */
+  .task-actions .complete-btn {
+    background-color: #88dd22; /* Verde */
+  }
+  
+  .task-actions .edit-btn {
+    background-color: #ffd700; /* Amarelo */
+  }
+  
+  .task-actions .delete-btn {
+    background-color: #ff4444; /* Vermelho */
+  }
+  
+  .task-actions button:hover {
+    opacity: 0.8;
+  }
+  

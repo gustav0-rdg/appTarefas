@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Gerenciador de Tarefas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./src/style/tasks-style.css">
+
+    
+</head>
+
+<body>
+    <!-- Header com saudação, data e hora -->
+    <header id="saudacaoHeader" class="header" id="header"></header>
+
+    <div class="main-container">
+        <!-- Formulário para adicionar nova tarefa -->
+        <div class="task-form">
+            <h2 id="titleTaskForm">Adicionar Nova Tarefa</h2>
+            <form id="taskForm">
+                <label for="taskName">Nome da Tarefa:</label>
+                <input type="text" id="taskName" required>
+
+                <label for="taskDescription">Descrição:</label>
+                <textarea id="taskDescription" rows="3"></textarea>
+
+                <label for="taskDate">Data de Vencimento:</label>
+                <input type="date" id="taskDate" required>
+
+                <label for="taskTime">Hora de Vencimento:</label>
+                <input type="time" id="taskTime" required>
+
+                <button type="button" id="adicionarTarefaBtn">ADICIONAR TAREFA</button>
+            </form>
+        </div>
+        <div class="filters">
+            <h3>Filtrar Tarefas:</h3>
+            <button id="filtrarTodasBtn">Todas</button>
+            <button id="filtrarPendentesBtn">Pendentes</button>
+            <button id="filtrarConcluidasBtn">Concluídas</button>
+            
+            <h3>Ordenar por:</h3>
+            <button id="ordenarRecentesBtn">Mais Recentes</button>
+            <button id="ordenarAntigasBtn">Mais Antigas</button>
+
+            <h3>Lixeira: </h3>
+            <button id="exibirLixeiraBtn">Itens Excluidos</button>
+        </div>
+        <!-- Lista de tarefas -->
+        <div id="taskList" class="task-list">
+            <h2>Suas Tarefas</h2>
+            <div class="task-list__tasks">
+
+            </div>
+        </div>
+       
+    </div>
+    <script src="./src/js/functions-ivo.js"></script>
+</body>
+
+</html>
