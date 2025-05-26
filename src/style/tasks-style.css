@@ -43,7 +43,41 @@
     background-color: #393e46;
     border-left: 4px solid #88dd22;
   }
+  .task-item.baixa{
+    border-left: 4px solid #2095b3;
+  }
+  .task-item.media{
+    border-left: 4px solid #ffdc12;
+  }
+  .task-item.alta{
+    border-left: 4px solid #dd2222;
+  }
   
+  .task-item.atrasada {
+    opacity: 0.9;
+    background-color: #333; /* Fundo mais escuro */
+    color: red; /* Cor de texto vermelha para alertar */
+    border: 2px solid red; /* Borda vermelha */
+    box-shadow: 0 0 15px red; /* Sombra vermelha */
+    animation: tremer 0.3s ease-in-out infinite, pulsar 1s ease-in-out infinite;
+  }
+  
+  /* Animação de tremor para dar a sensação de instabilidade */
+  @keyframes tremer {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-3px, 3px); }
+    50% { transform: translate(3px, -3px); }
+    75% { transform: translate(-2px, 2px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  /* Animação de pulsação para aumentar a tensão */
+  @keyframes pulsar {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.005); }
+    100% { transform: scale(1); }
+  }
+
   .task-item.concluida h3 {
     color: #88dd22;
     text-decoration: line-through;
@@ -124,7 +158,7 @@
     
   }
   
-  .task-form input, .task-form textarea {
+  .task-form input, .task-form textarea, .task-form select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;

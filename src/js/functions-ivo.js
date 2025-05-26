@@ -27,15 +27,20 @@ document.querySelector('#adicionarTarefaBtn').addEventListener('click', () => {
     const taskDescription = document.querySelector('#taskDescription').value;
     const taskDate = document.querySelector('#taskDate').value;
     const taskTime = document.querySelector('#taskTime').value;
+    const taskPriority = document.querySelector('#taskPriority').value;
     // verificao de valores válidos
-    if (taskName == '' || taskDate == '' || taskTime == '') {
-        Swal.fire({
-            background: "#393e46",
-            title: 'Valores inválidos',
-            text: 'Campos inválidos, insira algo valor',
+    if (taskName == '' || taskDate == '' || taskTime == '' || taskPriority == '') {
+        const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+        toast.fire({
+            title: 'Preencha os campos obrigatórios',
             icon: 'error',
-            color: '#fff',
-        })
+            })
         return;
     }
 
@@ -45,6 +50,7 @@ document.querySelector('#adicionarTarefaBtn').addEventListener('click', () => {
         'taskDescription': taskDescription,
         'taskDate': taskDate,
         'taskTime': taskTime,
+        'taskPriority': taskPriority,
         'concluida': false
     };
 
@@ -55,22 +61,40 @@ document.querySelector('#adicionarTarefaBtn').addEventListener('click', () => {
     exibirValores();
     document.querySelector('#taskForm').reset();
     // eventos de botoes
-
+    const toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+    toast.fire({
+        icon: 'success',
+        title: 'Tarefa adicionada.'   
+    })
 })
 
 const exibirValores = () => {
+    analiseData();
     const containerTasks = document.querySelector('.task-list');
     containerTasks.innerHTML = '';
     globalThis.tarefas.forEach((task, index) => {
         const taskHTML = document.createElement('div');
+        if (task.atrasada){
+            taskHTML.classList.add('atrasada');
+        }
         if (task.concluida) {
+            task.atrasda = false;
+            taskHTML.classList.remove('atrasada');
             taskHTML.classList.add('concluida');
         }
+        taskHTML.classList.add(task.taskPriority)
         taskHTML.classList.add('task-item');
         taskHTML.innerHTML += `
             <h3>${task.taskName}</h3>
             <p>${task.taskDescription}</p>
             <p><strong>Vencimento:</strong> ${task.taskDate} às ${task.taskTime}</p>
+            <p> Prioridade: ${task.taskPriority}</p>
             <div class="task-actions">
                 <button class="complete-btn" ${task.concluida ? 'disabled' : ''}>Concluir</button>
                 <button class="edit-btn" ${task.concluida ? 'disabled' : ''}>Editar</button>
@@ -123,6 +147,17 @@ const excluirTarefa = (index) => {
             globalThis.tarefas.splice(index, 1);
             localStorage.setItem('tarefas', JSON.stringify(globalThis.tarefas));
             exibirValores();
+            const toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+            });
+            toast.fire({
+                icon: 'success',
+                title: 'Tarefa excluída'   
+            })
         }
         else if(!result.isConfirmed){
             Swal.fire({
@@ -156,6 +191,14 @@ const editarTarefa = (index) => {
 
                 <label for="taskTime">Hora de Vencimento:</label>
                 <input type="time" id="newTaskTime" required>
+
+                <label for="taskTime">Prioridade</label>
+                <select name="newTaskPriority" id="newTaskPriority">
+                    <option value=""></option>
+                    <option value="baixa">Baixa</option>
+                    <option value="media">Média</option>
+                    <option value="alta">Alta</option>
+                </select>
             </form>
         </div>
         `,
@@ -169,18 +212,32 @@ const editarTarefa = (index) => {
             const newTaskDescription = document.querySelector('#newTaskDescription').value;
             const newTaskDate = document.querySelector('#newTaskDate').value;
             const newTaskTime = document.querySelector('#newTaskTime').value;
+            const newTaskPriority = document.querySelector('#newTaskPriority').value;
             // Guardando tudo dentro de um Objeto
             const newTask = {
                 'taskName':newTaskName,
                 'taskDescription':newTaskDescription,
                 'taskDate':newTaskDate,
                 'taskTime':newTaskTime,
+                'taskPriority':newTaskPriority,
                 'concluida':false
             };
+
             // Adicionando a tarefa atualizada no Objeto e local Storage
             globalThis.tarefas[index] = newTask;
             localStorage.setItem('tarefas', JSON.stringify(globalThis.tarefas));
             exibirValores();
+            const toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+            });
+            toast.fire({
+                icon: 'success',
+                title: 'Tarefa editada.'   
+            })
         }
         else{
             Swal.fire({
@@ -256,8 +313,35 @@ window.onload = () => {
 }
 
 const ordenarTarefas = (ordem) => {
-    if (ordem == 'recentes') globalThis.tarefas.sort((taskA, taskB) => new Date(`${taskA.taskDate}:${taskA.taskTime}`) - new Date(`${taskB.taskDate}:${taskB.taskTime}`));
-    if (ordem == 'antigas') globalThis.tarefas.sort((taskA, taskB) => new Date(`${taskB.taskDate}:${taskB.taskTime}`) - new Date(`${taskA.taskDate}:${taskA.taskTime}`));
+    // Obtendo a diferença entre as datas em MS e organizando elas
+    if (ordem == 'recentes'){
+        const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+        });
+        toast.fire({
+            icon: 'success',
+            title: 'Ordenado por mais recentes'   
+        })
+        globalThis.tarefas.sort((taskA, taskB) => new Date(`${taskA.taskDate}:${taskA.taskTime}`) - new Date(`${taskB.taskDate}:${taskB.taskTime}`));
+    } 
+    if (ordem == 'antigas'){
+        const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+        });
+        toast.fire({
+            icon: 'success',
+            title: 'Ordenado por mais antigas'   
+        })
+        globalThis.tarefas.sort((taskA, taskB) => new Date(`${taskB.taskDate}:${taskB.taskTime}`) - new Date(`${taskA.taskDate}:${taskA.taskTime}`));
+    } 
     localStorage['tarefas'] = JSON.stringify(globalThis.tarefas);
     exibirValores();
 }
@@ -279,90 +363,120 @@ document.querySelector("#exibirLixeiraBtn").addEventListener('click', () => {
         </div>
         `;
     });
-
-    Swal.fire({
-        background: "#393e46",
-        color: '#fff',
-        title: "Tarefas Excluídas",
-        html: taskHTML,
-        showCloseButton: true,
-        didOpen: () => {
-            document.querySelectorAll('.restaurar-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    Swal.fire({
-                        background: "#393e46",
-                        color: 'white',
-                        title: 'Confirmar restauração?',
-                        text: 'Se restaurada, ela voltará as tarefas ativas',
-                        icon: 'question',
-                        showConfirmButton: true,
-                        showCancelButton: true,
-                    }).then((result) =>{
-                        if(result.isConfirmed){
-                            Swal.fire({
-                                background: "#393e46",
-                                color: 'white',
-                                title: 'Restauração concluída',
-                                text: 'Sua tarefa foi restaurada',
-                                icon: 'success'
-                            })
-                            const index = e.target.closest('.task-item').dataset.index; // Pega o indice da tarefa inserido no HTML
-                            const tarefaRestaurada = globalThis.tarefasExcluidas.splice(index, 1)[0]; // Remove da lixeira
-                            tarefaRestaurada.concluida = false;
-                            console.log(tarefaRestaurada);
-                            globalThis.tarefas.push(tarefaRestaurada);
-                            localStorage.setItem('tarefas', JSON.stringify(globalThis.tarefas));
-                            localStorage.setItem('tarefasExcluidas', JSON.stringify(globalThis.tarefasExcluidas));
-                            ordenarTarefas('recentes');
-                            exibirValores();
-                        }
-                        else if(!result.isConfirmed){
-                            Swal.fire({
-                                background: "#393e46",
-                                color: 'white',
-                                title: 'Restauração falha',
-                                text: 'Sua tarefa não foi restaurada',
-                                icon: 'error'
-                            })
-                        }
-                    })
+    if (tarefas.length==0){
+        const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+        toast.fire({
+            icon: 'error',
+            title: 'Nenhuma tarefa na lixeira'   
+        })
+    }
+    else{
+        Swal.fire({
+            background: "#393e46",
+            color: '#fff',
+            title: "Tarefas Excluídas",
+            html: taskHTML,
+            confirmButtonText: "Cancelar",
+            didOpen: () => {
+                document.querySelectorAll('.restaurar-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        Swal.fire({
+                            background: "#393e46",
+                            color: 'white',
+                            title: 'Confirmar restauração?',
+                            text: 'Se restaurada, ela voltará as tarefas ativas',
+                            icon: 'question',
+                            showConfirmButton: true,
+                            showCancelButton: true,
+                        }).then((result) =>{
+                            if(result.isConfirmed){
+                                Swal.fire({
+                                    background: "#393e46",
+                                    color: 'white',
+                                    title: 'Restauração concluída',
+                                    text: 'Sua tarefa foi restaurada',
+                                    icon: 'success'
+                                })
+                                const index = e.target.closest('.task-item').dataset.index; // Pega o indice da tarefa inserido no HTML
+                                const tarefaRestaurada = globalThis.tarefasExcluidas.splice(index, 1)[0]; // Remove da lixeira
+                                tarefaRestaurada.concluida = false;
+                                globalThis.tarefas.push(tarefaRestaurada);
+                                localStorage.setItem('tarefas', JSON.stringify(globalThis.tarefas));
+                                localStorage.setItem('tarefasExcluidas', JSON.stringify(globalThis.tarefasExcluidas));
+                                ordenarTarefas('recentes');
+                                exibirValores();
+                            }
+                            else if(!result.isConfirmed){
+                                Swal.fire({
+                                    background: "#393e46",
+                                    color: 'white',
+                                    title: 'Restauração falha',
+                                    text: 'Sua tarefa não foi restaurada',
+                                    icon: 'error'
+                                })
+                            }
+                        })
+                    });
                 });
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn=>{
-                btn.addEventListener('click', (e) =>{
-                    const index = e.target.closest('.task-item').dataset.index;
-                    Swal.fire({
-                        background: "#393e46",
-                        color: 'white',
-                        title: 'Confirmar Exclusão?',
-                        text: 'Uma vez confirmada, essa ação será irreversível',
-                        icon: 'question',
-                        showCancelButton: true,
-                    }).then((result) =>{
-                        if(result.isConfirmed){
-                            Swal.fire({
-                                background: "#393e46",
-                                color: 'white',
-                                title: 'Tarefa excluída.',
-                                text: 'Sua tarefa foi excluída!',
-                                icon: 'success'
-                            })
-                            globalThis.tarefasExcluidas.splice(index, 1)[0];
-                            localStorage.setItem('tarefasExcluidas', JSON.stringify(globalThis.tarefasExcluidas));
-                        }
-                        else if(!result.isConfirmed){
-                            Swal.fire({
-                                background: "#393e46",
-                                color: 'white',
-                                title: 'Tarefa mantida.',
-                                text: 'Sua tarefa não foi excluida',
-                                icon: 'error'
-                            })
-                            return;
-                        }
+                document.querySelectorAll('.delete-btn').forEach(btn=>{
+                    btn.addEventListener('click', (e) =>{
+                        const index = e.target.closest('.task-item').dataset.index;
+                        Swal.fire({
+                            background: "#393e46",
+                            color: 'white',
+                            title: 'Confirmar Exclusão?',
+                            text: 'Uma vez confirmada, essa ação será irreversível',
+                            icon: 'question',
+                            showCancelButton: true,
+                            cancelButtonColor: 'red',
+                        }).then((result) =>{
+                            if(result.isConfirmed){
+                                Swal.fire({
+                                    background: "#393e46",
+                                    color: 'white',
+                                    title: 'Tarefa excluída.',
+                                    text: 'Sua tarefa foi excluída!',
+                                    icon: 'success'
+                                })
+                                globalThis.tarefasExcluidas.splice(index, 1)[0];
+                                localStorage.setItem('tarefasExcluidas', JSON.stringify(globalThis.tarefasExcluidas));
+                            }
+                            else if(!result.isConfirmed){
+                                Swal.fire({
+                                    background: "#393e46",
+                                    color: 'white',
+                                    title: 'Tarefa mantida.',
+                                    text: 'Sua tarefa não foi excluida',
+                                    icon: 'error'
+                                })
+                                return;
+                            }
+                        })
                     })
                 })
-            })
-        }
-    });
+            }
+        });
+    }
 });
+
+const analiseData = () =>{
+    const tarefas = JSON.parse(localStorage.getItem('tarefas'));
+    const hoje = new Date();
+    const dataFormatada = hoje.toISOString().split('T')[0];
+    tarefas.forEach((task, index) =>{
+        dateTask = task.taskDate;
+        if (dateTask < dataFormatada){
+            tarefas[index].atrasada = true;
+        }
+        else if(dateTask > dataFormatada){
+            tarefas[index].atrasada = false;
+        }
+    })
+    localStorage.setItem('tarefas', JSON.stringify(tarefas));
+}
